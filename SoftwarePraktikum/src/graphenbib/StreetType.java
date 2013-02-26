@@ -1,7 +1,7 @@
 package graphenbib;
 
 public enum StreetType {
-	MOTORWAY,TRUNK,PRIMARY,SECONDARY,TERTIARY,RESIDENTIAL,LIVING_STREET,ROAD,UNKNOWN,SHORTESTPATH;
+	MOTORWAY,TRUNK,PRIMARY,SECONDARY,TERTIARY,RESIDENTIAL,LIVING_STREET,ROAD,UNKNOWN,SHORTESTPATH,BUILDING;
 	
 	@Override
 	public String toString() {
@@ -24,6 +24,8 @@ public enum StreetType {
 				return "Road";
 			case SHORTESTPATH:
 				return "Shortest Path";
+			case BUILDING:
+				return "Building";
 			default:
 				return "Unknown";
 		}

@@ -111,4 +111,8 @@ public class MainFrame extends JFrame{
 	public boolean isSelectDest() {
 		return selectDest;
 	}
+	
+	public MenuHandler getMenuHandler(){
+		return mHandler;
+	}
 }

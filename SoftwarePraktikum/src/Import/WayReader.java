@@ -124,6 +124,12 @@ public class WayReader {
 							"name")) {
 						name = parser.getAttributeValue(null, "v");
 					}
+					if (parser.getAttributeValue(null, "k")
+							.equalsIgnoreCase("building")) {
+						oneway = true;
+						highway = true;
+						streetType = StreetType.BUILDING;
+					}
 				}
 				break;
 
@@ -152,7 +158,7 @@ public class WayReader {
 								Config.initialTemporaryLengthForEdges,
 								oneway, name, streetType);
 						ways.insertEdge(iedge);
-						if (oneway)
+						if (!oneway)
 							nrWays++;
 					}
 					oneway = false;

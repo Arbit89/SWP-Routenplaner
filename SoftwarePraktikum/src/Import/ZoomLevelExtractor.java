@@ -31,7 +31,7 @@ class ZoomLevelExtractor {
 	protected static MapGraph extractZoomLevel(MapGraph mg, int ZoomLevel)
 			throws EmptyInputException, InvalidInputException,
 			NodeNotInGraphException {
-		if (ZoomLevel < 0 || ZoomLevel > 2)
+		if (ZoomLevel < -1 || ZoomLevel > 2)
 			throw new InvalidInputException(
 					"Das Zoomlevel liegt ausserhalb des moeglichen bereichs!");
 		int nrways = 0;
@@ -51,6 +51,24 @@ class ZoomLevelExtractor {
 			MapNode node = it.next();
 			MapEdge[] mapedges = node.getOutgoingEdges();
 			for (int i = 0; i < mapedges.length; i++) {
+				if (ZoomLevel == -1) {
+					if (mapedges[i].getType() == StreetType.BUILDING) {
+						zoomgraph.insertEdge(mapedges[i].getNodeStart()
+								.getUID(), mapedges[i].getNodeEnd().getUID(),
+								mapedges[i].getUID(), mapedges[i].getLength(),
+								mapedges[i].getType(), mapedges[i].getName());
+						nrways++;
+					}
+				}
+				if (ZoomLevel == 0) {
+					if (mapedges[i].getType() != StreetType.BUILDING) {
+						zoomgraph.insertEdge(mapedges[i].getNodeStart()
+								.getUID(), mapedges[i].getNodeEnd().getUID(),
+								mapedges[i].getUID(), mapedges[i].getLength(),
+								mapedges[i].getType(), mapedges[i].getName());
+						nrways++;
+					}
+				}
 				if (ZoomLevel == 1) {
 					if (mapedges[i].getType() == StreetType.MOTORWAY
 							|| mapedges[i].getType() == StreetType.TRUNK

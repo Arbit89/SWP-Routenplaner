@@ -119,13 +119,14 @@ public class OSMImporter {
 
 			tiles.add(new Tile(filename, graph.getUpperLeft(), graph
 					.getLowerRight(), graph.getSize()));
+			LoadSaveObject.saveObject(new File(this.workfolder + filename + -1),
+					ZoomLevelExtractor.extractZoomLevel(graph, -1));
+			LoadSaveObject.saveObject(new File(this.workfolder + filename + 0),
+					ZoomLevelExtractor.extractZoomLevel(graph, 0));
 			LoadSaveObject.saveObject(new File(this.workfolder + filename + 1),
 					ZoomLevelExtractor.extractZoomLevel(graph, 1));
 			LoadSaveObject.saveObject(new File(this.workfolder + filename + 2),
 					ZoomLevelExtractor.extractZoomLevel(graph, 2));
-			graph.setFilename(filename + 0);
-			LoadSaveObject.saveObject(new File(this.workfolder + filename + 0),
-					graph);
 
 			graph = null;
 			LoadSaveObject.saveObject(new File(configpath), tiles);
@@ -262,15 +263,15 @@ public class OSMImporter {
 				}
 			}
 			mg.correctLength();
-			LoadSaveObject.saveObject(
-					new File(this.workfolder + mg.getFilename() + 1),
+			LoadSaveObject.saveObject(new File(this.workfolder + mg.getFilename() + -1),
+					ZoomLevelExtractor.extractZoomLevel(mg, -1));
+			LoadSaveObject.saveObject(new File(this.workfolder + mg.getFilename() + 0),
+					ZoomLevelExtractor.extractZoomLevel(mg, 0));
+			LoadSaveObject.saveObject(new File(this.workfolder + mg.getFilename() + 1),
 					ZoomLevelExtractor.extractZoomLevel(mg, 1));
-			LoadSaveObject.saveObject(
-					new File(this.workfolder + mg.getFilename() + 2),
+			LoadSaveObject.saveObject(new File(this.workfolder + mg.getFilename() + 2),
 					ZoomLevelExtractor.extractZoomLevel(mg, 2));
-			mg.setFilename(mg.getFilename() + 0);
-			LoadSaveObject.saveObject(
-					new File(this.workfolder + mg.getFilename()), mg);
+			mg=null;
 
 		}
 		Logger.getInstance().log("OSMImporter.reconstructGPS",
@@ -392,7 +393,7 @@ public class OSMImporter {
 	 */
 	public void getTiles(GPS upperleft, GPS loweright, int ZoomLevel,
 			ArrayList<MapGraph> graphs) throws InvalidInputException {
-		if (ZoomLevel < 0 || ZoomLevel > 2)
+		if (ZoomLevel < -1 || ZoomLevel > 2)
 			throw new InvalidInputException(
 					"Das Zoomlevel liegt ausserhalb des moeglichen bereichs!");
 		ArrayList<String> gnames = new ArrayList<String>();
@@ -459,7 +460,7 @@ public class OSMImporter {
 
 	public MapGraph getTile(GPS node, int ZoomLevel)
 			throws InvalidInputException {
-		if (ZoomLevel < 0 || ZoomLevel > 2)
+		if (ZoomLevel < -1 || ZoomLevel > 2)
 			throw new InvalidInputException(
 					"Das Zoomlevel liegt ausserhalb des moeglichen bereichs!");
 
@@ -496,7 +497,7 @@ public class OSMImporter {
 	 */
 	public String getTileName(int node, String tilename, int ZoomLevel)
 			throws InvalidInputException {
-		if (ZoomLevel < 0 || ZoomLevel > 2)
+		if (ZoomLevel < -1 || ZoomLevel > 2)
 			throw new InvalidInputException(
 					"Das Zoomlevel liegt ausserhalb des moeglichen bereichs!");
 		Iterator<Tile> it = this.tiles.iterator();
@@ -525,7 +526,7 @@ public class OSMImporter {
 	 */
 	public MapGraph getTile(int node, int ZoomLevel)
 			throws InvalidInputException {
-		if (ZoomLevel < 0 || ZoomLevel > 2)
+		if (ZoomLevel < -1 || ZoomLevel > 2)
 			throw new InvalidInputException(
 					"Das Zoomlevel liegt ausserhalb des moeglichen bereichs!");
 		Iterator<Tile> it = this.tiles.iterator();
@@ -552,7 +553,7 @@ public class OSMImporter {
 	 */
 	public ArrayList<MapGraph> getAllTiles(int ZoomLevel)
 			throws InvalidInputException {
-		if (ZoomLevel < 0 || ZoomLevel > 2)
+		if (ZoomLevel < -1 || ZoomLevel > 2)
 			throw new InvalidInputException(
 					"Das Zoomlevel liegt ausserhalb des moeglichen bereichs!");
 

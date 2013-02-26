@@ -28,6 +28,7 @@ public class RepaintWorker implements Runnable {
 	private volatile BufferedImage buffer;	//Buffer, auf den gezeichnet wird
 	private final MapPanel mapP;			//Referenz auf Hauptfenster
 	private final Iterator<Street2Draw> streets2DrawIt;	//Iterator fuer Strassen
+	private final Iterator<Street2Draw> buildings2DrawIt;	//Iterator fuer Gebäude
 	private final Iterator<Street2Draw> shortestPathIt;	//Iterator fuer berechnete Route
 	private LabelRenderer labelRend;					//Zur Verwaltung der Labels
 	private final StreetPainter streetP;				//Zum Zeichnen von Strassenkanten
@@ -40,15 +41,16 @@ public class RepaintWorker implements Runnable {
 	/**
 	 * 
 	 * @param buffer BufferedImage, auf das gezeichnet werden soll
-	 * @param it Iterator ueber Strassen
+	 * @param streetIt Iterator ueber Strassen
 	 * @param shortestPathIt Iterator ueber berechnete Route
 	 * @param mapP	Referenz auf Hauptfenster
 	 * @param guiZoomLvl zoomLevel, in dem die Karte momentan engezeigt wird
 	 */
-	public RepaintWorker(BufferedImage buffer, Iterator<Street2Draw> it, Path2Draw shortestPath, Iterator<Street2Draw> shortestPathIt, MapPanel mapP,int guiZoomLvl){
+	public RepaintWorker(BufferedImage buffer, Iterator<Street2Draw> streetIt, Iterator<Street2Draw> buildingsIt, Path2Draw shortestPath, Iterator<Street2Draw> shortestPathIt, MapPanel mapP,int guiZoomLvl){
 	//public RepaintWorker(BufferedImage buffer, Iterator<Street2Draw> it, Path2Draw shortestPath, MapPanel mapP,int guiZoomLvl){
 		this.buffer = buffer;
-		streets2DrawIt = it;
+		streets2DrawIt = streetIt;
+		buildings2DrawIt = buildingsIt;
 		this.mapP = mapP;
 		this.path = shortestPath;
 		this.shortestPathIt = shortestPathIt;
@@ -97,19 +99,22 @@ public class RepaintWorker implements Runnable {
 		}
 		if (buffer == null) return;
 		try {
-			drawStreets(g2d); //Zeichne Strassen
+			drawStreets(g2d, buildings2DrawIt);	//Zeichen Gebäude
+			drawStreets(g2d, streets2DrawIt); //Zeichne Strassen
+			
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 		drawPath(g2d);		//Zeichne kürzeste Route
 		labelRend.drawLabels(g2d);	//Zeichne Labels
+		mapP.repaint();
 	}
 
 	//-------------------------RENDERING LOGIC------------------------------------------------------------------------------------
-	private void drawStreets(Graphics2D g2d) throws Exception{
+	private void drawStreets(Graphics2D g2d, Iterator<Street2Draw> iter) throws Exception{
 		count = Config.waitCount;
-		while(streets2DrawIt.hasNext()){				//Iteriere ueber Strassen um diese zu zeichnen
-			final Street2Draw temp = streets2DrawIt.next();	//temporaere Strasse, die in einer Iteration gezeichnet wird
+		while(iter.hasNext()){				//Iteriere ueber Strassen um diese zu zeichnen
+			final Street2Draw temp = iter.next();	//temporaere Strasse, die in einer Iteration gezeichnet wird
 			final float [] startCoord = {temp.getStartLongitude(), temp.getStartLatitude()}; //GPS Startkoordinaten der aktuellen Strasse
 			final float [] endCoord   = {temp.getEndLongitude(), temp.getEndLatitude()}; //GPS Endkoordinaten der aktuellen Strasse
 
@@ -148,7 +153,6 @@ public class RepaintWorker implements Runnable {
 				count = Config.waitCount;
 			}
 		}
-		mapP.repaint();
 	}
 
 	/**
@@ -172,7 +176,7 @@ public class RepaintWorker implements Runnable {
 	private void drawEdge(float[] globalP1, float[] globalP2,StreetType streetType, Graphics2D g){
 		final int[] p1= worldToLocal(globalP1);
 		final int[] p2 = worldToLocal(globalP2);
-		streetP.paintStreet(p1, p2, streetType, g, guiZoomLvl);
+		streetP.paintStreet(p1, p2, streetType, g, (guiZoomLvl>0?guiZoomLvl:0));
 	}
 
 	/**
@@ -221,7 +225,7 @@ public class RepaintWorker implements Runnable {
 				g2d.drawImage(startFlag, startPos[0]-125, startPos[1]-imgSize*flagFactor+50, imgSize*flagFactor, imgSize*flagFactor, null);
 				mapP.repaint();
 		}
-//		mapP.repaint();
+		mapP.repaint();
 	}
 
 	//Getter-Methoden:

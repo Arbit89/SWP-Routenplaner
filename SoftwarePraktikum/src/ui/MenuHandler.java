@@ -35,6 +35,7 @@ public class MenuHandler implements ActionListener{
 	private JCheckBoxMenuItem showSidePanel;
 	private JMenuItem jDoc;
 	private JMenuItem shortDoc;
+	private boolean isBuildings = false;
 	
 	/**
 	 * 
@@ -140,6 +141,7 @@ public class MenuHandler implements ActionListener{
 		}
 		
 		else if(ae.getSource().equals(showBuildings)){
+			isBuildings = showBuildings.getState();
 			main.Logger.getInstance().log("Menu", "Gebaeude "+(showBuildings.getState()?"an":"aus")+ "geschaltet");
 		}
 		
@@ -169,6 +171,10 @@ public class MenuHandler implements ActionListener{
 				JOptionPane.showMessageDialog(null,"Doku konnte nciht geoeffnet werden","Fehler", JOptionPane.CANCEL_OPTION);
 			}
 		}
+	}
+	
+	public boolean isBuildings(){
+		return isBuildings;
 	}
 
 }

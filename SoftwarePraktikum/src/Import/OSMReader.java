@@ -247,6 +247,7 @@ class OSMReader {
 					}
 					if (wayFlag
 							&& parser.getLocalName().equalsIgnoreCase("tag")) {
+						
 						if (parser.getAttributeValue(null, "k")
 								.equalsIgnoreCase("highway")) {
 							highway = true;
@@ -278,6 +279,12 @@ class OSMReader {
 								.equalsIgnoreCase("name")) {
 							name = parser.getAttributeValue(null, "v");
 						}
+						if (parser.getAttributeValue(null, "k")
+								.equalsIgnoreCase("building")) {
+							highway = true;
+							oneway = true;
+							streetType = StreetType.BUILDING;
+						}
 					}
 					break;
 
@@ -286,7 +293,7 @@ class OSMReader {
 					if (wayFlag
 							&& parser.getLocalName().equalsIgnoreCase("way")) {
 						wayFlag = false;
-						if (!highway || streetType == StreetType.UNKNOWN
+						if ( !highway  || streetType == StreetType.UNKNOWN
 								|| !allowcar || !allowaccess) { // Nicht
 																// importieren
 																// falls nicht
@@ -299,6 +306,7 @@ class OSMReader {
 							name = "";
 							break;
 						}
+						
 						Iterator<ImportEdge> itr = aList.iterator();
 						Node node;
 						ImportEdge edge;

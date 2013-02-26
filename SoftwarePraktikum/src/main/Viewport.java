@@ -21,6 +21,7 @@ import algorithmen.Query;
 public class Viewport {
 	private OSMImporter osmImp;
 	private ArrayList<MapGraph> mapGraphTiles= new ArrayList<MapGraph>();
+	private ArrayList<MapGraph> mapGraphBuildings= new ArrayList<MapGraph>();
 	private HierarchyMapGraph hGraph;
 	private Path2Draw shortestPath = null;
 	
@@ -52,16 +53,26 @@ public class Viewport {
 	public synchronized void update(GPSCoordinate upperleft, GPSCoordinate lowerright, ViewportCallback callback) {
 		synchronized (this.mapGraphTiles) {
 			try {
-				osmImp.getTiles(upperleft, lowerright, this.zoomLevel, this.mapGraphTiles);
+				if(zoomLevel==-1){
+					osmImp.getTiles(upperleft, lowerright, -1, this.mapGraphBuildings);
+					osmImp.getTiles(upperleft, lowerright, 0, this.mapGraphTiles);
+				}
+				else{
+					osmImp.getTiles(upperleft, lowerright, this.zoomLevel, this.mapGraphTiles);
+					this.mapGraphBuildings = new ArrayList<MapGraph>();
+				}
+				
 			} catch (InvalidInputException e) {
 				// Diese Exception sollte nicht auftretten, da sicher gestellt wird, dass das Zoomlevel
 				//im korrekten Intervall liegt.
 				e.printStackTrace();
 			}	
 		}
-		Logger.getInstance().log("Viewport.update", "Zahl geladener Tiles: "+this.mapGraphTiles.size());
-		callback.updateComplete(new Street2DrawIt(this.mapGraphTiles), this.shortestPath.getPathIt(this));
-	}
+		Logger.getInstance().log("Viewport.update", "#Tiles: "+this.mapGraphTiles.size()+" Lvl: "+zoomLevel);
+		Street2DrawIt tilesIt = new Street2DrawIt(this.mapGraphTiles);
+		Street2DrawIt buildIt = new Street2DrawIt(this.mapGraphBuildings);
+		callback.updateComplete(tilesIt, buildIt , this.shortestPath.getPathIt(this));
+	} 
 	
 	
 	/**
@@ -134,12 +145,12 @@ public class Viewport {
 	
 	/**
 	 * Setzt das aktuelle Zoomlevel auf den uebergebenen Wert, falls dieser die Bedingung nichtnegativ ist
-	 * und kleiner oder gleich dem main.maxZoomLevel. Ansonsten tut sie Methode nichts.  
+	 * und kleiner oder gleich dem main.maxZoomLevel. Ansonsten tut die Methode nichts.  
 	 * Mehr ueber Zoomlevels gibt es in der mainConstants.maxZoomLevel
 	 * @param zoomLevel Das zu setzende Zoomlevel.
 	 */
 	public void setZoomLevel(int zoomLevel) {
-		if(zoomLevel>=0 || zoomLevel<=main.Config.maxZoomLevel) {
+		if(zoomLevel>=-1 && zoomLevel<=main.Config.maxZoomLevel) {
 			this.zoomLevel=zoomLevel;
 		}
 	}

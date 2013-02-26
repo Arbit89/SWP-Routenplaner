@@ -112,6 +112,7 @@ public class Config {
 	public static long averageSpeedLivingStreet=10;
 	public static long averageSpeedRoad=50;
 	public static long averageSpeedUnknown=50;
+	public static long averageSpeedBuilding=1;
 	
 	
 	public static long getAverageSpeed(StreetType streetType) {
@@ -137,6 +138,9 @@ public class Config {
 				break;
 			case ROAD:
 				averageSpeed=Config.averageSpeedRoad;
+				break;
+			case BUILDING:
+				averageSpeed=Config.averageSpeedBuilding;
 				break;
 			case UNKNOWN:
 				averageSpeed=Config.averageSpeedUnknown;
@@ -176,5 +180,6 @@ public class Config {
 	public static final Color livingStreetColor = new Color(220,220,220);
 	public static final Color shortestPathColor = new Color(255,  0,  0);
 	public static final Color unknownColor 		= new Color(  0,  0,  0);
+	public static final Color buildingColor 	= new Color(  0,  0,  0);
 	
 }

@@ -25,7 +25,8 @@ public class Street2Draw {
 		this.label = label;
 		this.streetType = streetType;
 		
-		markASCIIOneway();
+		if(this.streetType != StreetType.BUILDING)
+			markASCIIOneway();
 	}
 
 	/**

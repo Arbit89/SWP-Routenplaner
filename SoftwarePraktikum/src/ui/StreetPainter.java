@@ -62,6 +62,7 @@ public class StreetPainter {
 		args.put(StreetType.LIVING_STREET,	new StreetPaintArgs(1.3f,Config.livingStreetColor));
 		args.put(StreetType.ROAD,			new StreetPaintArgs(1.3f,Config.roadColor));
 		args.put(StreetType.SHORTESTPATH,	new StreetPaintArgs(2.0f,Config.shortestPathColor));
+		args.put(StreetType.BUILDING,		new StreetPaintArgs(0.1f,Config.buildingColor));
 		args.put(StreetType.UNKNOWN,		new StreetPaintArgs(0.1f,Config.unknownColor));
 	}
 

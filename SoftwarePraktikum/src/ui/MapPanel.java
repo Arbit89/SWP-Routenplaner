@@ -192,9 +192,13 @@ public class MapPanel extends JPanel{
 	 * Methode zum Anpassen des ZoomLvls im {@link Viewport}, damit richtige Tiles geladen werden
 	 */
 	private void changeZoomLevel(){
-		if(40>=zoomCount)
-			viewport.setZoomLevel(0);
-		else if(60>=zoomCount&&zoomCount>40)
+		if(60>=zoomCount){
+			if(parentFrame.getMenuHandler().isBuildings()&&zoomCount<=40)
+				viewport.setZoomLevel(-1);
+			else
+				viewport.setZoomLevel(0);
+		}
+		else if(80>=zoomCount&&zoomCount>60)
 			viewport.setZoomLevel(1);
 		else
 			viewport.setZoomLevel(2);
@@ -227,11 +231,11 @@ public class MapPanel extends JPanel{
 					new GPSCoordinate(lowerRight[1],lowerRight[0]),
 					new ViewportCallback(){
 				@Override
-				public void updateComplete(Iterator<Street2Draw> it, Iterator<Street2Draw> shortestPathIt) {
+				public void updateComplete(Iterator<Street2Draw> streetIt, Iterator<Street2Draw> buildingsIt, Iterator<Street2Draw> shortestPathIt) {
 					if (repWork != null)
 						repWork.cancel();
 
-					repWork = new RepaintWorker(buffer, it, viewport.getShortestPath(), shortestPathIt, self, viewport.getZoomLevel());
+					repWork = new RepaintWorker(buffer, streetIt, buildingsIt, viewport.getShortestPath(), shortestPathIt, self, viewport.getZoomLevel());
 					repWork.start();
 				}
 
