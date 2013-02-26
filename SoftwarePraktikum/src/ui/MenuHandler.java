@@ -31,7 +31,8 @@ public class MenuHandler implements ActionListener{
 	private JMenuItem mgsave;				//einzelne Menuepunkte in Menuepunkten
 	private JMenuItem osm;
 	private JMenuItem exit;
-	private JCheckBoxMenuItem buildings;
+	private JCheckBoxMenuItem showBuildings;
+	private JCheckBoxMenuItem showSidePanel;
 	private JMenuItem jDoc;
 	private JMenuItem shortDoc;
 	
@@ -57,21 +58,24 @@ public class MenuHandler implements ActionListener{
 		mgsave = new JMenuItem("gepreprocesste Karte oeffnen");
 		osm = new JMenuItem("*.osm preprocessen");
 		exit = new JMenuItem("Beenden");
-		buildings = new JCheckBoxMenuItem("Gebaeude anzeigen");	
+		showBuildings = new JCheckBoxMenuItem("Gebaeude anzeigen", false);	
+		showSidePanel = new JCheckBoxMenuItem("SidePanel anzeigen", true);	
 		jDoc = new JMenuItem("JavaDoc");
 		shortDoc = new JMenuItem("Kurzdoku");
 
 		mgsave.addActionListener(this);
 		osm.addActionListener(this);
 		exit.addActionListener(this);
-		buildings.addActionListener(this);
+		showBuildings.addActionListener(this);
+		showSidePanel.addActionListener(this);
 		shortDoc.addActionListener(this);
 		jDoc.addActionListener(this);
 		
 		open.add(mgsave);
 		open.add(osm);
 
-		options.add(buildings);
+		options.add(showBuildings);
+		options.add(showSidePanel);
 		
 		menuBar.add(open);
 		menuBar.add(options);
@@ -135,8 +139,17 @@ public class MenuHandler implements ActionListener{
 				System.exit(0);
 		}
 		
-		else if(ae.getSource().equals(buildings)){
-			main.Logger.getInstance().log("Menu", "Gebaeude "+(buildings.getState()?"an":"aus")+ "geschaltet");
+		else if(ae.getSource().equals(showBuildings)){
+			main.Logger.getInstance().log("Menu", "Gebaeude "+(showBuildings.getState()?"an":"aus")+ "geschaltet");
+		}
+		
+		else if(ae.getSource().equals(showSidePanel)){
+			if(showSidePanel.getState()){
+				parentFrame.getSidePanel().setVisible(true);
+			}
+			else{
+				parentFrame.getSidePanel().setVisible(false);
+			}
 		}
 		
 		else if(ae.getSource().equals(jDoc)){
