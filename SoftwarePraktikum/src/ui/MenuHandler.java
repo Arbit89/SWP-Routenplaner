@@ -111,7 +111,7 @@ public class MenuHandler implements ActionListener{
 				if(f.getName().endsWith(".tiles"))		//Wenn .tiles Datei ausgewaehlt
 					parentFrame.getMapPanel().openMapFile(f);
 				else JOptionPane.showMessageDialog(parentFrame, "Bitte waehlen Sie die .tiles Datei aus!");
-			parentFrame.repaint();
+			parentFrame.getMapPanel().repaintAllStuff();
 		}
 
 		else if(ae.getSource().equals(osm)){		//Wenn OSM gepreprocesst werden soll
@@ -130,7 +130,7 @@ public class MenuHandler implements ActionListener{
 				}
 				else JOptionPane.showMessageDialog(parentFrame, "Bitte waehlen Sie eine .osm Datei aus!");
 
-			parentFrame.repaint();
+			parentFrame.getMapPanel().repaintAllStuff();
 		}
 
 		else if(ae.getSource().equals(exit)){		//Wenn Programm beendet werden soll
@@ -143,6 +143,8 @@ public class MenuHandler implements ActionListener{
 		else if(ae.getSource().equals(showBuildings)){
 			isBuildings = showBuildings.getState();
 			main.Logger.getInstance().log("Menu", "Gebaeude "+(showBuildings.getState()?"an":"aus")+ "geschaltet");
+//			parentFrame.getMapPanel().zoomIn();
+//			parentFrame.getMapPanel().zoomOut();
 		}
 		
 		else if(ae.getSource().equals(showSidePanel)){
@@ -152,6 +154,7 @@ public class MenuHandler implements ActionListener{
 			else{
 				parentFrame.getSidePanel().setVisible(false);
 			}
+			parentFrame.getMapPanel().repaintAllStuff();
 		}
 		
 		else if(ae.getSource().equals(jDoc)){

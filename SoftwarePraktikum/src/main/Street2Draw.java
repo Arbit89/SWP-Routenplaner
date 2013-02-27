@@ -81,9 +81,9 @@ public class Street2Draw {
 	private void markASCIIOneway(){
 		if(oneWay){
 			if (startLongitude <= endLongitude){
-				label = ">> "+label+" >>";
+				label = ""+label+"";	//>>
 			}else{
-				label = "<< "+label+" <<";
+				label = ""+label+"";	//<<
 			}
 		}
 	}

@@ -121,7 +121,7 @@ public class ClickNDragListener extends MouseAdapter implements MouseMotionListe
 				infoP.setDest(selectedWorldCoordinates);
 				infoP.setDestLabel("("+selectedWorldCoordinates[0]+","+selectedWorldCoordinates[1]+")");
 			}
-			
+			parent.getMapPanel().repaintAllStuff();
 		}
 		
 	}
